@@ -1,13 +1,29 @@
-const {token, applicationID, serverID} = require("./config.json");
-const {interactionCreate} = require("./src/command/interactions");
+const {token} = require("./config.json");
+const {interactionCreate, registerCommands} = require("./src/interactions");
+const { 
+	Client, 
+	RichEmbed, 
+	Events, 
+	GatewayIntentBits
+} = require("discord.js");
 
-const {Client, RichEmbed, REST, Routes, GatewayIntentBits } = require("discord.js");
-const bot = new Client({ intents: []});
+const bot = new Client({ intents: [ GatewayIntentBits.Guilds ]});
 
-bot.on("ready", () => {
+const onReady = async (client) => {
 	console.clear();
-	console.log(`Logged in as ${bot.user.tag}!`)
-})
+	console.log(`Logged in as ${client.user.tag}!`);
+	registerCommands();
+	const g = await client.guilds.fetch();
 
-bot.on('interactionCreate', interactionCreate)
+	g.forEach((key, val ) => {
+		console.log({
+			serverName: key.name,
+			serverId: val,
+		})
+	})
+}
+
+bot.on(Events.ClientReady, onReady);
+bot.on(Events.InteractionCreate, interactionCreate);
+
 bot.login(token);
