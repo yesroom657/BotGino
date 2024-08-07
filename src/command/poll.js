@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js")
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js")
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -12,8 +12,19 @@ module.exports = {
 			),
 		
 	async execute(interaction){
-		//TODO create code for creating straw polls.
-		const question = "Question: " + interaction.options.getString('question')
-		interaction.reply(question)
+		const question = interaction.options.getString('question');
+		const embed = new EmbedBuilder()
+			.setColor(0xFF0000)
+			.setTitle(question)
+			.setAuthor({
+				name: interaction.user.tag,
+				iconURL: interaction.user.displayAvatarURL()
+			});
+
+		interaction.channel.send({embeds: [embed]})
+		.then((m) => {
+			m.react("✅");
+			m.react("❎"); //#ED4245
+		})
 	}
 }
