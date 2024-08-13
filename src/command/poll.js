@@ -20,11 +20,11 @@ module.exports = {
 				name: interaction.user.tag,
 				iconURL: interaction.user.displayAvatarURL()
 			});
-
-		interaction.channel.send({embeds: [embed]})
+		await interaction.deferReply({ephemeral:true})
+		await interaction.channel.send({embeds: [embed]})
 		.then((m) => {
 			m.react("✅");
-			m.react("❎"); //#ED4245
+			m.react("❎"); 
 		})
 	}
 }
